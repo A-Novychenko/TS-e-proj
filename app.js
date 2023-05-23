@@ -1,14 +1,21 @@
 // Задайте правильні ts типи для класичних js;
-var age = 50;
-var name1 = "Max";
-var toggle = true;
-var empty = null;
-var notInitialize = undefined;
-var callback = function (a) {
+var age;
+age = 50;
+var name1;
+name1 = "Max";
+var toggle;
+toggle = true;
+var empty;
+empty = null;
+var notInitialize;
+notInitialize = undefined;
+var callback = function (a) { return 100 + a; };
+callback = function (a) {
     return 100 + a;
 };
 // Задайте тип для змінної, в яку можна зберегти будь-яке значення.
-var anything = -20;
+var anything;
+anything = -20;
 anything = "Text";
 anything = {};
 // Виправте код зі змінною unknown, щоб у нього можна було зберегти змінну з текстом.
@@ -22,16 +29,18 @@ if (typeof some === "string") {
 var person;
 person = ["Max", 21];
 // Опишіть enum умову наступну: він повинен відображати статус завантаження. Завантажується (LOADING) та завантажена (READY).
-var Status;
-(function (Status) {
-    Status[Status["LOADING"] = 0] = "LOADING";
-    Status[Status["READY"] = 1] = "READY";
-})(Status || (Status = {}));
-var service = {
-    status: Status.LOADING,
+var Load;
+(function (Load) {
+    Load[Load["LOADING"] = 0] = "LOADING";
+    Load[Load["READY"] = 1] = "READY";
+})(Load || (Load = {}));
+var page = {
+    load: Load.READY,
 };
-if (service.status === Status.LOADING)
-    console.log("Завантажується");
+if (page.load === Load.LOADING)
+    console.log("Сторінка завантажується");
+if (page.load === Load.READY)
+    console.log("Сторінка завантажена");
 // Зробіть змінну, яка може приймати або рядок, або число.
 var varNumOrStr;
 //
@@ -42,14 +51,18 @@ function showMessage(message) {
     console.log(message);
 }
 function calc(num1, num2) {
-    if (typeof num1 === "string" || typeof num2 === "string") {
-        return num1.toString + num2.toString();
-    }
     return num1 + num2;
 }
+// function calc(num1: number | string, num2: number | string): number | string {
+//   if (typeof num1 === "string" || typeof num2 === "string") {
+//     return num1.toString + num2.toString();
+//   }
+//   return num1 + num2;
+// }
 function customError() {
     throw new Error("Error");
 }
+/////////////////////////////////////////////////
 // Створіть свій тип даних на основі наявних даних.
 var page1 = {
     title: "The awesome page",
