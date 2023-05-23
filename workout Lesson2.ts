@@ -14,7 +14,7 @@ let num: number;
 num = 10;
 // num = "10"; // err
 
-let str: string;
+let str11: string;
 str = "string only";
 // str = 5 //err
 
