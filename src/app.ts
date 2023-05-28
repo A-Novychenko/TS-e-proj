@@ -1,220 +1,76 @@
-class House {
-  private tenants: string[] = [];
+// Давайте побудуємо будинок.
 
-  constructor(private readonly type: string, private street: string) {}
+// Створіть абстрактний клас House, в ньому повинна бути наступна логіка
 
-  public showAddress(this: House) {
-    console.log("Address: " + this.street);
-  }
+// властивість door – вона може бути закрита, або відкрита.
+// властивість key – об'єкт класу Key.
+// конструктор приймає аргумент класу Key та зберігає його у властивість key.
 
-  public showType(this: House) {
-    console.log("House Type: " + this.type);
-  }
+// метод comeIn, який додає об'єкт класу Person у властивість tenants і це спрацьовує лише, якщо door відкрита.
+// абстрактний метод openDoor приймає аргумент класу Key
+// Створіть клас MyHouse, який реалізує клас House
 
-  public addTenant(tenant: string) {
-    this.tenants.push(tenant);
-  }
+// створюємо метод openDoor, оскільки він приймає ключ, звіряємо збережений ключ у властивості key чи дорівнює він ключу з аргументу, якщо так, відкриваємо двері.
 
-  public showTenants() {
-    console.log(this.tenants);
-  }
-}
+// Створіть об'єкт Key
 
-class StoneHouse extends House {
-  private chargeOfTheHouse: string; // Главный в доме
+// є тільки властивість signature
+// під час створення об'єкта генерує випадкове число та зберігає його у signature
+// метод getSignature повертає випадкове число з signature
 
-  constructor(street: string, generalTenant: string) {
-    super("stone", street); // Вызов родительского конструктора
+// Створіть об'єкт Person
 
-    // Добавляем владельца квартиры
-    this.chargeOfTheHouse = generalTenant;
-    this.addTenant(generalTenant);
-  }
+// конструктор приймає ключ класу Key і зберігає його у властивість key
+// метод getKey повертає key
+// Зробіть так, щоб мешканець потрапив додому.
 
-  public showTenants() {
-    console.log("General: " + this.chargeOfTheHouse);
-
-    // Запускаем родительский метод showTenants();
-    super.showTenants();
-  }
-}
-
-const stoneHouse = new StoneHouse("Stone-world", "Max");
-
-stoneHouse.addTenant("Anton");
-stoneHouse.addTenant("Nikita");
-
-stoneHouse.showTenants();
-stoneHouse.showType();
-stoneHouse.showAddress();
-
-type PersonInformation = {
-  firstName?: string;
-  lastName?: string;
-};
-
-class Person {
-  private personInfo: PersonInformation = {};
-
-  set firstName(value: string) {
-    console.log("firstName added");
-    this.personInfo.firstName = value;
-  }
-
-  set lastName(value: string) {
-    console.log("lastName added");
-    this.personInfo.lastName = value;
-  }
-
-  get info() {
-    const {personInfo} = this;
-    return `${personInfo.lastName} ${personInfo.firstName}`;
-  }
-}
-
-const person = new Person();
-
-person.lastName = "Pupkin";
-person.firstName = "Petha";
-
-console.log(person.info);
-
-class UseStatic {
-  private static count = 0;
+class Key {
+  private signature: number;
 
   constructor() {
-    UseStatic.count += 1;
+    this.signature = Math.random() * 100;
   }
 
-  public static itStaticMethod() {
-    console.log("Run static method");
-  }
-
-  public showCount() {
-    console.log(UseStatic.count);
+  getSignature(): number {
+    return this.signature;
   }
 }
 
-const obj1 = new UseStatic();
-const obj2 = new UseStatic();
-const obj3 = new UseStatic();
+class Person {
+  constructor(private key: Key) {}
+  getKey(): Key {
+    return this.key;
+  }
+}
 
-obj1.showCount();
-obj2.showCount();
-obj3.showCount();
+abstract class House {
+  protected door = false;
+  private tenants: Person[] = [];
 
-UseStatic.itStaticMethod();
+  constructor(protected key: Key) {}
 
-//
+  comeIn(person: Person): void {
+    if (!this.door) {
+      throw new Error("Door is close");
+    }
+    this.tenants.push(person);
+    console.log("Person inside");
+  }
 
-//
+  abstract openDoor(key: Key): boolean;
+}
 
-//
+class MyHouse extends House {
+  openDoor(key: Key) {
+    if (key.getSignature() !== this.key.getSignature()) {
+      throw new Error("Key to another door");
+    }
+    return (this.door = true);
+  }
+}
+const key = new Key();
+const person = new Person(key);
+const myHouse = new MyHouse(key);
 
-//
-// class Zhiguli_8 {
-//   private needRepair = false;
-//   private maxEngineLoad = 3;
-
-//   /**
-//    * Заводит двигатель машины если это возможно
-//    */
-//   private checkEngine() {
-//     // Проверяем не сломан ли двигатель
-//     if (this.needRepair) {
-//       throw new Error("Engine not work");
-//     }
-
-//     // Пробуем его завести
-//     const engineLoad = Math.floor(Math.random() * this.maxEngineLoad) + 1;
-//     if (this.maxEngineLoad === engineLoad) {
-//       this.needRepair = true;
-//       throw new Error("Engine broken again");
-//     }
-//   }
-
-//   /**
-//    * Завести двигатель
-//    */
-//   public startEngine() {
-//     this.checkEngine();
-
-//     console.log("Ta-ta-ta-ta");
-//   }
-
-//   /**
-//    * Ремонт двигателя
-//    */
-//   public repairEngine() {
-//     this.needRepair = false;
-
-//     console.log("Engine rebuilt");
-//   }
-// }
-
-// const auto = new Zhiguli_8();
-
-// try {
-//   auto.startEngine();
-//   auto.startEngine();
-//   auto.startEngine();
-//   auto.startEngine();
-// } catch (e) {
-//   console.log(e);
-//   auto.repairEngine();
-//   auto.startEngine();
-// }
-
-// ///////////
-
-// /////////
-
-// function protectedMethod() {
-//   return "Something";
-// }
-
-// class myClassJS {
-//   myPublicMethod() {
-//     return protectedMethod();
-//   }
-// }
-
-// class myClass {
-//   private protectedMethod() {
-//     return "Something";
-//   }
-
-//   public myPublicMethod() {
-//     return this.protectedMethod();
-//   }
-// }
-
-// //
-
-// //
-
-// //
-
-// class Animal {
-//   public say() {
-//     console.log("Nothing to say");
-//   }
-// }
-
-// class Cat extends Animal {
-//   public say() {
-//     console.log("Meow");
-//   }
-// }
-
-// class Dog extends Animal {
-//   public say() {
-//     console.log("Woof");
-//   }
-// }
-
-// const cat = new Cat();
-// cat.say(); // Meow
-
-// const dog = new Dog();
-// dog.say(); // Woof
+myHouse.openDoor(person.getKey());
+myHouse.comeIn(person);

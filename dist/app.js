@@ -1,78 +1,45 @@
 "use strict";
+class Key {
+    constructor() {
+        this.signature = Math.random() * 100;
+    }
+    getSignature() {
+        return this.signature;
+    }
+}
+class Person {
+    constructor(key) {
+        this.key = key;
+    }
+    getKey() {
+        return this.key;
+    }
+}
 class House {
-    constructor(type, street) {
-        this.type = type;
-        this.street = street;
+    constructor(key) {
+        this.key = key;
+        this.door = false;
         this.tenants = [];
     }
-    showAddress() {
-        console.log("Address: " + this.street);
-    }
-    showType() {
-        console.log("House Type: " + this.type);
-    }
-    addTenant(tenant) {
-        this.tenants.push(tenant);
-    }
-    showTenants() {
-        console.log(this.tenants);
+    comeIn(person) {
+        if (!this.door) {
+            throw new Error("Door is close");
+        }
+        this.tenants.push(person);
+        console.log("Person inside");
     }
 }
-class StoneHouse extends House {
-    constructor(street, generalTenant) {
-        super("stone", street);
-        this.chargeOfTheHouse = generalTenant;
-        this.addTenant(generalTenant);
-    }
-    showTenants() {
-        console.log("General: " + this.chargeOfTheHouse);
-        super.showTenants();
+class MyHouse extends House {
+    openDoor(key) {
+        if (key.getSignature() !== this.key.getSignature()) {
+            throw new Error("Key to another door");
+        }
+        return (this.door = true);
     }
 }
-const stoneHouse = new StoneHouse("Stone-world", "Max");
-stoneHouse.addTenant("Anton");
-stoneHouse.addTenant("Nikita");
-stoneHouse.showTenants();
-stoneHouse.showType();
-stoneHouse.showAddress();
-class Person {
-    constructor() {
-        this.personInfo = {};
-    }
-    set firstName(value) {
-        console.log("firstName added");
-        this.personInfo.firstName = value;
-    }
-    set lastName(value) {
-        console.log("lastName added");
-        this.personInfo.lastName = value;
-    }
-    get info() {
-        const { personInfo } = this;
-        return `${personInfo.lastName} ${personInfo.firstName}`;
-    }
-}
-const person = new Person();
-person.lastName = "Pupkin";
-person.firstName = "Petha";
-console.log(person.info);
-class UseStatic {
-    constructor() {
-        UseStatic.count += 1;
-    }
-    static itStaticMethod() {
-        console.log("Run static method");
-    }
-    showCount() {
-        console.log(UseStatic.count);
-    }
-}
-UseStatic.count = 0;
-const obj1 = new UseStatic();
-const obj2 = new UseStatic();
-const obj3 = new UseStatic();
-obj1.showCount();
-obj2.showCount();
-obj3.showCount();
-UseStatic.itStaticMethod();
+const key = new Key();
+const person = new Person(key);
+const myHouse = new MyHouse(key);
+myHouse.openDoor(person.getKey());
+myHouse.comeIn(person);
 //# sourceMappingURL=app.js.map
