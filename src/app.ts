@@ -1,76 +1,51 @@
-// Давайте побудуємо будинок.
+// Є функція, яка повертає Promise, він повертає масив рядків і чисел, опишіть правильно тип.
 
-// Створіть абстрактний клас House, в ньому повинна бути наступна логіка
+function getPromise() {
+  return new Promise((resolve) => {
+    resolve(["Text", 50]);
+  });
+}
 
-// властивість door – вона може бути закрита, або відкрита.
-// властивість key – об'єкт класу Key.
-// конструктор приймає аргумент класу Key та зберігає його у властивість key.
+getPromise().then((data) => {
+  console.log(data);
+});
 
-// метод comeIn, який додає об'єкт класу Person у властивість tenants і це спрацьовує лише, якщо door відкрита.
-// абстрактний метод openDoor приймає аргумент класу Key
-// Створіть клас MyHouse, який реалізує клас House
+// У вас є наступний тип даних
 
-// створюємо метод openDoor, оскільки він приймає ключ, звіряємо збережений ключ у властивості key чи дорівнює він ключу з аргументу, якщо так, відкриваємо двері.
+type AllType = {
+  name: string;
+  position: number;
+  color: string;
+  weight: number;
+};
 
-// Створіть об'єкт Key
+// Є функція, вона приймає два аргументи, в один потрапляє name і color, в іншу частину - position і weight. Потрібно явно вказати, що ці поля з AllType. І сама функція повертає AllType. Скористайтеся Pick.
 
-// є тільки властивість signature
-// під час створення об'єкта генерує випадкове число та зберігає його у signature
-// метод getSignature повертає випадкове число з signature
+function compare(top, bottom): AllType {
+  return {
+    name: top.name,
+    color: top.color,
+    position: bottom.position,
+    weight: bottom.weight,
+  };
+}
 
-// Створіть об'єкт Person
+// Вкажіть дженерики для функції об'єднання об'єктів.
 
-// конструктор приймає ключ класу Key і зберігає його у властивість key
-// метод getKey повертає key
-// Зробіть так, щоб мешканець потрапив додому.
+function merge(objA, objB) {
+  return Object.assign(objA, objB);
+}
 
-class Key {
-  private signature: number;
+// У вас є наступні класи
 
-  constructor() {
-    this.signature = Math.random() * 100;
-  }
+class Component {
+  constructor(public props: T) {}
+}
 
-  getSignature(): number {
-    return this.signature;
+class Page extends Component {
+  pageInfo() {
+    console.log(this.props.title);
   }
 }
 
-class Person {
-  constructor(private key: Key) {}
-  getKey(): Key {
-    return this.key;
-  }
-}
-
-abstract class House {
-  protected door = false;
-  private tenants: Person[] = [];
-
-  constructor(protected key: Key) {}
-
-  comeIn(person: Person): void {
-    if (!this.door) {
-      throw new Error("Door is close");
-    }
-    this.tenants.push(person);
-    console.log("Person inside");
-  }
-
-  abstract openDoor(key: Key): boolean;
-}
-
-class MyHouse extends House {
-  openDoor(key: Key) {
-    if (key.getSignature() !== this.key.getSignature()) {
-      throw new Error("Key to another door");
-    }
-    return (this.door = true);
-  }
-}
-const key = new Key();
-const person = new Person(key);
-const myHouse = new MyHouse(key);
-
-myHouse.openDoor(person.getKey());
-myHouse.comeIn(person);
+// Тільки додаючи дженерики для класів та інтерфейс, приберіть помилку.
