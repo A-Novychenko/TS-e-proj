@@ -1,6 +1,6 @@
 // Є функція, яка повертає Promise, він повертає масив рядків і чисел, опишіть правильно тип.
 
-function getPromise() {
+function getPromise(): Promise<Array<string | number>> {
   return new Promise((resolve) => {
     resolve(["Text", 50]);
   });
